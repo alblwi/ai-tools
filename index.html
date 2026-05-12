@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Services Survey — Executive Input</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: #F2F2F7;
+  color: #1D1D1F;
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+.container { max-width: 680px; margin: 0 auto; }
+
+/* Header */
+.header {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 12px;
+  border: 1px solid #E5E5EA;
+}
+.org-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #3C3489;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 12px;
+}
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+.header p { font-size: 14px; color: #636366; line-height: 1.7; margin-bottom: 12px; }
+.badge {
+  display: inline-block;
+  background: #EEEDFE;
+  color: #3C3489;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid #E5E5EA;
+  margin-bottom: 12px;
+}
+
+/* Progress */
+.pb-bg { height: 4px; background: #E5E5EA; border-radius: 4px; margin-bottom: 8px; }
+.pb-fill { height: 4px; background: #3C3489; border-radius: 4px; transition: width 0.4s ease; }
+.pb-row { display: flex; justify-content: space-between; font-size: 12px; color: #8E8E93; margin-bottom: 1.5rem; }
+
+/* Step labels */
+.step-tag { font-size: 11px; font-weight: 700; color: #3C3489; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+.step-title { font-size: 20px; font-weight: 700; color: #1D1D1F; margin-bottom: 4px; }
+.step-sub { font-size: 13px; color: #636366; line-height: 1.6; margin-bottom: 1.5rem; }
+
+/* Form elements */
+.qblock { margin-bottom: 1.5rem; }
+.qlabel { display: block; font-size: 14px; font-weight: 600; color: #1D1D1F; margin-bottom: 8px; }
+.qhint { font-size: 12px; color: #8E8E93; margin-bottom: 8px; }
+
+select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #D1D1D6;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1D1D1F;
+  background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238E8E93' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+select:focus { outline: none; border-color: #3C3489; box-shadow: 0 0 0 3px rgba(60,52,137,0.1); }
+
+textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #D1D1D6;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1D1D1F;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 90px;
+  transition: border-color 0.15s;
+}
+textarea:focus { outline: none; border-color: #3C3489; box-shadow: 0 0 0 3px rgba(60,52,137,0.1); }
+textarea::placeholder { color: #C7C7CC; }
+
+/* Model cards */
+.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mcard {
+  border: 1.5px solid #E5E5EA;
+  border-radius: 12px;
+  padding: 12px;
+  position: relative;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mcard.has-status { border-color: #534AB7; background: #FAFAFF; }
+.mc-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.mc-av {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  flex-shrink: 0;
+}
+.mc-name { font-size: 13px; font-weight: 600; color: #1D1D1F; line-height: 1.2; }
+.mc-co { font-size: 11px; color: #8E8E93; }
+.mc-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+
+.spill {
+  font-size: 11px; padding: 4px 8px;
+  border-radius: 20px;
+  border: 1px solid #D1D1D6;
+  background: transparent;
+  color: #8E8E93;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  line-height: 1.3;
+}
+.spill:hover { background: #F2F2F7; }
+.sp-aware { background: #EAF3DE; border-color: #52A31D; color: #2E6B0A; }
+.sp-tried { background: #E3F0FB; border-color: #2272C3; color: #0A4A8F; }
+.sp-using { background: #EEEDFE; border-color: #534AB7; color: #3C3489; }
+
+.star-btn {
+  position: absolute; top: 8px; right: 10px;
+  background: none; border: none;
+  font-size: 17px; cursor: pointer;
+  color: #D1D1D6; line-height: 1; padding: 0;
+  transition: color 0.15s;
+}
+.star-btn.starred { color: #FF9F0A; }
+
+/* Option items */
+.opt-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid #E5E5EA;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  transition: all 0.15s;
+}
+.opt-item:hover { background: #F2F2F7; }
+.opt-item.selected { border-color: #534AB7; background: #EEEDFE; }
+.opt-item input { margin-top: 2px; accent-color: #3C3489; flex-shrink: 0; }
+.opt-text { font-size: 13px; color: #1D1D1F; line-height: 1.5; }
+.opt-item.selected .opt-text { color: #3C3489; }
+
+/* Task grid */
+.task-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.titem {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px;
+  border: 1.5px solid #E5E5EA;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px; color: #1D1D1F;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.titem:hover { background: #F2F2F7; }
+.titem.selected { border-color: #534AB7; background: #EEEDFE; color: #3C3489; font-weight: 600; }
+.titem input { accent-color: #3C3489; flex-shrink: 0; }
+
+/* Pill wrap for learning */
+.pill-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.lpill {
+  font-size: 12px; padding: 5px 13px;
+  border-radius: 20px;
+  border: 1px solid #D1D1D6;
+  background: transparent; color: #636366;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+}
+.lpill:hover { background: #F2F2F7; }
+.lpill.selected { background: #EEEDFE; border-color: #534AB7; color: #3C3489; font-weight: 600; }
+
+/* Section labels */
+.sect-lbl {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #8E8E93; margin: 12px 0 6px;
+}
+
+/* Divider */
+.divider { height: 1px; background: #E5E5EA; margin: 1.5rem 0; }
+
+/* Nav */
+.nav-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 1.5rem; padding-top: 1.25rem;
+  border-top: 1px solid #E5E5EA;
+}
+.btn {
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+  border: 1.5px solid #D1D1D6;
+  background: #fff; color: #1D1D1F;
+}
+.btn:hover { background: #F2F2F7; }
+.btn-p { background: #3C3489; border-color: #3C3489; color: #fff; }
+.btn-p:hover { background: #534AB7; border-color: #534AB7; }
+.btn-p:active { transform: scale(0.98); }
+
+/* Loading state */
+.btn-p.loading { opacity: 0.7; cursor: not-allowed; }
+
+/* Thank you */
+.ty {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+.ty-icon {
+  width: 64px; height: 64px;
+  background: #EEEDFE;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 34px;
+}
+.ty h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.ty p { font-size: 14px; color: #636366; line-height: 1.7; max-width: 400px; margin: 0 auto 1.5rem; }
+
+/* Summary */
+.summary {
+  background: #F2F2F7;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: left;
+}
+.sum-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #8E8E93; margin-bottom: 10px; }
+.sum-row { font-size: 13px; color: #636366; padding: 6px 0; border-bottom: 1px solid #E5E5EA; }
+.sum-row:last-child { border: none; }
+.sum-row strong { color: #1D1D1F; font-weight: 600; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: #8E8E93;
+  padding: 1rem;
+  line-height: 1.7;
+}
+.footer a { color: #3C3489; text-decoration: none; }
+
+/* Error banner */
+.error-banner {
+  background: #FFF0F0;
+  border: 1px solid #FFBDBD;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #C0392B;
+  margin-top: 12px;
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+  body { padding: 1rem 0.75rem 3rem; }
+  .card, .header { padding: 1.25rem; }
+  .model-grid { grid-template-columns: 1fr; }
+  .task-grid { grid-template-columns: 1fr; }
+  .nav-row { flex-direction: column-reverse; gap: 10px; }
+  .nav-row .btn { width: 100%; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="org-badge">&#128203; IT Department &middot; AI Strategy</div>
+    <h1>AI Services Survey &mdash; Executive Input</h1>
+    <p>The CEO has requested your perspective on AI adoption across the organization. Your input will directly shape our AI strategy and investment roadmap. This survey takes approximately 5&ndash;7 minutes.</p>
+    <span class="badge">&#128274; Confidential &middot; C-Level Only</span>
+  </div>
+
+  <!-- Survey card -->
+  <div class="card" id="survey-card">
+    <div class="pb-bg"><div class="pb-fill" id="pb" style="width:20%"></div></div>
+    <div class="pb-row">
+      <span id="step-lbl">Step 1 of 5</span>
+      <span id="step-pct">20%</span>
+    </div>
+
+    <!-- ===== STEP 1: PROFILE ===== -->
+    <div id="step-1">
+      <div class="step-tag">Step 1 &mdash; Profile</div>
+      <div class="step-title">Your role &amp; area</div>
+      <div class="step-sub">Helps us understand your perspective when reviewing AI opportunities and priorities.</div>
+      <div class="qblock">
+        <label class="qlabel">Your executive role</label>
+        <select id="q-role">
+          <option value="">&#8212; Please select &#8212;</option>
+          <option>CEO &ndash; Chief Executive Officer</option>
+          <option>CFO &ndash; Chief Financial Officer</option>
+          <option>COO &ndash; Chief Operating Officer</option>
+          <option>CTO &ndash; Chief Technology Officer</option>
+          <option>CMO &ndash; Chief Marketing Officer</option>
+          <option>CHRO &ndash; Chief Human Resources Officer</option>
+          <option>CSO &ndash; Chief Strategy Officer</option>
+          <option>CCO &ndash; Chief Commercial Officer</option>
+          <option>Other C-Level</option>
+        </select>
+      </div>
+      <div class="qblock">
+        <label class="qlabel">Primary area of oversight</label>
+        <select id="q-area">
+          <option value="">&#8212; Please select &#8212;</option>
+          <option>Finance &amp; Budget</option>
+          <option>Operations &amp; Facilities</option>
+          <option>Technology &amp; Digital</option>
+          <option>Commercial &amp; Revenue</option>
+          <option>People &amp; Culture</option>
+          <option>Strategy &amp; Planning</option>
+          <option>Marketing &amp; Fan Engagement</option>
+          <option>Sports Performance &amp; Analytics</option>
+        </select>
+      </div>
+      <div class="nav-row">
+        <span></span>
+        <button class="btn btn-p" onclick="goStep(2)">Next &#8594;</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 2: AI ASSISTANTS ===== -->
+    <div id="step-2" style="display:none">
+      <div class="step-tag">Step 2 &mdash; AI Models</div>
+      <div class="step-title">Core AI language models</div>
+      <div class="step-sub">For each model, mark your experience level. Tap &#9733; to indicate your preferred one. You can select multiple.</div>
+      <div class="qblock">
+        <div class="qhint"><strong>Aware</strong> = heard of it &nbsp;&bull;&nbsp; <strong>Tried it</strong> = personally tested &nbsp;&bull;&nbsp; <strong>Using &#10003;</strong> = actively in use</div>
+        <div class="model-grid" id="grid-main"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn" onclick="goStep(1)">&#8592; Back</button>
+        <button class="btn btn-p" onclick="goStep(3)">Next &#8594;</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3: ENTERPRISE & TOOLS ===== -->
+    <div id="step-3" style="display:none">
+      <div class="step-tag">Step 3 &mdash; Platforms &amp; Tools</div>
+      <div class="step-title">Enterprise platforms &amp; specialized tools</div>
+      <div class="step-sub">Same approach &mdash; mark your experience with enterprise AI platforms and specialized tools.</div>
+      <div class="qblock">
+        <label class="qlabel">Enterprise AI platforms</label>
+        <div class="model-grid" id="grid-ent"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="qblock">
+        <label class="qlabel">Specialized AI tools</label>
+        <div class="model-grid" id="grid-spec"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn" onclick="goStep(2)">&#8592; Back</button>
+        <button class="btn btn-p" onclick="goStep(4)">Next &#8594;</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 4: TASKS & DIRECTION ===== -->
+    <div id="step-4" style="display:none">
+      <div class="step-tag">Step 4 &mdash; Usage &amp; Direction</div>
+      <div class="step-title">How you use AI &amp; where you're heading</div>
+      <div class="step-sub">Tell us about your current usage patterns and your strategic direction for AI adoption.</div>
+      <div class="qblock">
+        <label class="qlabel">Which tasks do you or your team use AI for? <span style="font-weight:400;color:#8E8E93">(select all that apply)</span></label>
+        <div class="task-grid" id="grid-tasks"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="qblock">
+        <label class="qlabel">Which AI solution are you leaning towards for enterprise-wide adoption?</label>
+        <div id="group-lean"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="qblock">
+        <label class="qlabel">Main reason for this direction?</label>
+        <div id="group-reason"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn" onclick="goStep(3)">&#8592; Back</button>
+        <button class="btn btn-p" onclick="goStep(5)">Next &#8594;</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 5: SKILLS & LEARNING ===== -->
+    <div id="step-5" style="display:none">
+      <div class="step-tag">Step 5 &mdash; Skills &amp; Learning</div>
+      <div class="step-title">Advanced capabilities &amp; learning goals</div>
+      <div class="step-sub">Tell us how deep your AI usage goes and what you'd like to explore further.</div>
+      <div class="qblock">
+        <label class="qlabel">Have you used any of these advanced AI capabilities? <span style="font-weight:400;color:#8E8E93">(select all)</span></label>
+        <div id="group-adv"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="qblock">
+        <label class="qlabel">Which AI tools or models would you like to learn more about?</label>
+        <div class="sect-lbl">AI Assistants</div>
+        <div class="pill-wrap" id="pills-main"></div>
+        <div class="sect-lbl">Enterprise Platforms</div>
+        <div class="pill-wrap" id="pills-ent"></div>
+        <div class="sect-lbl">Specialized Tools</div>
+        <div class="pill-wrap" id="pills-spec"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="qblock">
+        <label class="qlabel">What specific AI capability would create the most value in your work?</label>
+        <textarea id="q-open" placeholder="Describe a use case, a challenge, or a capability you wish existed&#8230;"></textarea>
+      </div>
+      <div class="error-banner" id="error-banner">
+        There was an issue submitting your response. Please try again or contact IT.
+      </div>
+      <div class="nav-row">
+        <button class="btn" onclick="goStep(4)">&#8592; Back</button>
+        <button class="btn btn-p" id="submit-btn" onclick="doSubmit()">Submit response &#8594;</button>
+      </div>
+    </div>
+
+  </div><!-- /survey-card -->
+
+  <!-- Thank You Card -->
+  <div class="card" id="ty-card" style="display:none">
+    <div class="ty">
+      <div class="ty-icon">&#10003;</div>
+      <h2>Thank you for your input</h2>
+      <p>Your response has been recorded and will contribute directly to shaping the organization's AI strategy and investment plan. The IT leadership team will share consolidated findings at the next executive briefing.</p>
+      <div class="summary" id="summary-box"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    IT Department &middot; AI Strategy Initiative &middot; Confidential<br>
+    For questions or assistance: <a href="mailto:alblwi@icloud.com">Ahmed Al-Blwi &mdash; IT Director</a>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+var MAIN = [
+  {id:'chatgpt',  name:'ChatGPT',      co:'OpenAI',        bg:'#10A37F', tx:'#fff', i:'G'},
+  {id:'claude',   name:'Claude',       co:'Anthropic',     bg:'#D97757', tx:'#fff', i:'C'},
+  {id:'gemini',   name:'Gemini',       co:'Google',        bg:'#4285F4', tx:'#fff', i:'G'},
+  {id:'copilot',  name:'Copilot',      co:'Microsoft',     bg:'#0078D4', tx:'#fff', i:'M'},
+  {id:'grok',     name:'Grok',         co:'xAI',           bg:'#1C1C1E', tx:'#fff', i:'X'},
+  {id:'perplexity',name:'Perplexity',  co:'Perplexity AI', bg:'#20B2AA', tx:'#fff', i:'P'},
+  {id:'llama',    name:'Llama',        co:'Meta',          bg:'#0082FB', tx:'#fff', i:'L'},
+  {id:'mistral',  name:'Mistral',      co:'Mistral AI',    bg:'#F54E42', tx:'#fff', i:'M'}
+];
+var ENT = [
+  {id:'ms365',    name:'M365 Copilot', co:'Microsoft',     bg:'#0078D4', tx:'#fff', i:'M'},
+  {id:'azureoai', name:'Azure OpenAI', co:'Microsoft',     bg:'#0089D6', tx:'#fff', i:'A'},
+  {id:'gwsai',    name:'Workspace AI', co:'Google',        bg:'#4285F4', tx:'#fff', i:'G'},
+  {id:'awsbed',   name:'AWS Bedrock',  co:'Amazon',        bg:'#FF9900', tx:'#fff', i:'A'},
+  {id:'sfein',    name:'Einstein AI',  co:'Salesforce',    bg:'#00A1E0', tx:'#fff', i:'S'},
+  {id:'ibmwat',   name:'Watson AI',    co:'IBM',           bg:'#054ADA', tx:'#fff', i:'I'}
+];
+var SPEC = [
+  {id:'ghcop',    name:'GitHub Copilot',  co:'GitHub / MS',  bg:'#24292F', tx:'#fff', i:'G'},
+  {id:'midj',     name:'Midjourney',      co:'Image AI',     bg:'#4A4AD8', tx:'#fff', i:'M'},
+  {id:'dalle',    name:'DALL-E 3',        co:'OpenAI',       bg:'#10A37F', tx:'#fff', i:'D'},
+  {id:'runway',   name:'Runway / Sora',   co:'Video AI',     bg:'#5B4FE9', tx:'#fff', i:'R'},
+  {id:'elevlabs', name:'ElevenLabs',      co:'Voice AI',     bg:'#2C2C2C', tx:'#fff', i:'E'},
+  {id:'gramm',    name:'Grammarly AI',    co:'Grammarly',    bg:'#15C39A', tx:'#fff', i:'G'},
+  {id:'notionai', name:'Notion AI',       co:'Notion',       bg:'#333',    tx:'#fff', i:'N'},
+  {id:'zapier',   name:'Zapier AI',       co:'Zapier',       bg:'#FF4A00', tx:'#fff', i:'Z'}
+];
+var TASKS = [
+  'Report & document writing',       'Email drafting & communication',
+  'Data analysis & insights',        'Code writing & review',
+  'Research & information lookup',   'Meeting notes & transcription',
+  'Image & content generation',      'Workflow automation',
+  'Translation & localization',      'Strategic planning support',
+  'Presentation creation',           'Customer / fan engagement'
+];
+var LEAN_OPTS = [
+  'ChatGPT (OpenAI)',
+  'Claude (Anthropic)',
+  'Gemini (Google)',
+  'Microsoft Copilot / Azure OpenAI',
+  'AWS Bedrock',
+  'No strong preference yet',
+  'A combination of providers',
+  'Other'
+];
+var REASON_OPTS = [
+  'Security & data governance',
+  'Integration with existing systems',
+  'Cost & licensing model',
+  'Output quality & accuracy',
+  'Vendor relationship & support',
+  'Ease of use & staff adoption',
+  'Ecosystem & third-party partnerships',
+  'Executive familiarity & trust'
+];
+var ADV_FEATURES = [
+  {v:'agents',      l:'AI Agents — autonomous multi-step task execution'},
+  {v:'tools',       l:'Tool use / function calling (AI that calls external APIs)'},
+  {v:'skills',      l:'Custom AI skills & workflow automation'},
+  {v:'rag',         l:'RAG — AI connected to internal knowledge bases'},
+  {v:'api',         l:'Direct API / SDK integration by my team'},
+  {v:'finetune',    l:'Fine-tuning or custom model training'},
+  {v:'voice',       l:'Voice AI / conversational speech interfaces'},
+  {v:'multimodal',  l:'Multimodal AI — combining text, image & data'},
+  {v:'copilot365',  l:'AI embedded in productivity apps (Copilot, Notion AI...)'},
+  {v:'search',      l:'AI-powered enterprise search & knowledge management'}
+];
+
+// ============================================================
+// STATE
+// ============================================================
+var statusMap = {};  // model id -> 'aware'|'tried'|'using'
+var starMap   = {};  // model id -> bool
+var learnMap  = {};  // model id -> bool
+var curStep   = 1;
+
+// ============================================================
+// RENDER MODEL CARDS
+// ============================================================
+function mkCard(m, gridId) {
+  var st      = statusMap[m.id] || '';
+  var starred = starMap[m.id]   || false;
+  return '<div class="mcard' + (st ? ' has-status' : '') + '" id="mc-' + gridId + '-' + m.id + '">'
+    + '<button class="star-btn' + (starred ? ' starred' : '') + '" onclick="toggleStar(\'' + m.id + '\',\'' + gridId + '\')" title="Mark as preferred">&#9733;</button>'
+    + '<div class="mc-hd">'
+    +   '<div class="mc-av" style="background:' + m.bg + ';color:' + m.tx + '">' + m.i + '</div>'
+    +   '<div><div class="mc-name">' + m.name + '</div><div class="mc-co">' + m.co + '</div></div>'
+    + '</div>'
+    + '<div class="mc-btns">'
+    +   '<button class="spill' + (st === 'aware' ? ' sp-aware' : '') + '" onclick="setStatus(\'' + m.id + '\',\'aware\',\'' + gridId + '\')">Aware</button>'
+    +   '<button class="spill' + (st === 'tried' ? ' sp-tried' : '') + '" onclick="setStatus(\'' + m.id + '\',\'tried\',\'' + gridId + '\')">Tried it</button>'
+    +   '<button class="spill' + (st === 'using' ? ' sp-using' : '') + '" onclick="setStatus(\'' + m.id + '\',\'using\',\'' + gridId + '\')">Using &#10003;</button>'
+    + '</div></div>';
+}
+
+function getArr(gridId) {
+  if (gridId === 'grid-main') return MAIN;
+  if (gridId === 'grid-ent')  return ENT;
+  if (gridId === 'grid-spec') return SPEC;
+  return [];
+}
+
+function renderGrid(gridId) {
+  var el = document.getElementById(gridId);
+  if (el) el.innerHTML = getArr(gridId).map(function(m) { return mkCard(m, gridId); }).join('');
+}
+
+function setStatus(id, status, gridId) {
+  statusMap[id] = statusMap[id] === status ? '' : status;
+  renderGrid(gridId);
+}
+
+function toggleStar(id, gridId) {
+  starMap[id] = !starMap[id];
+  renderGrid(gridId);
+}
+
+// ============================================================
+// BUILD DYNAMIC SECTIONS
+// ============================================================
+function buildTasks() {
+  var el = document.getElementById('grid-tasks');
+  if (!el) return;
+  el.innerHTML = TASKS.map(function(t) {
+    return '<label class="titem"><input type="checkbox" value="' + t + '"> ' + t + '</label>';
+  }).join('');
+  el.querySelectorAll('.titem').forEach(function(item) {
+    item.querySelector('input').addEventListener('change', function(e) {
+      item.classList.toggle('selected', e.target.checked);
+    });
+  });
+}
+
+function buildRadio(opts, containerId, name) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = opts.map(function(o) {
+    return '<label class="opt-item"><input type="radio" name="' + name + '" value="' + o + '"> <span class="opt-text">' + o + '</span></label>';
+  }).join('');
+  el.querySelectorAll('.opt-item').forEach(function(item) {
+    item.querySelector('input').addEventListener('change', function() {
+      el.querySelectorAll('.opt-item').forEach(function(x) { x.classList.remove('selected'); });
+      item.classList.add('selected');
+    });
+  });
+}
+
+function buildAdv() {
+  var el = document.getElementById('group-adv');
+  if (!el) return;
+  el.innerHTML = ADV_FEATURES.map(function(f) {
+    return '<label class="opt-item"><input type="checkbox" value="' + f.v + '"> <span class="opt-text">' + f.l + '</span></label>';
+  }).join('');
+  el.querySelectorAll('.opt-item').forEach(function(item) {
+    item.querySelector('input').addEventListener('change', function(e) {
+      item.classList.toggle('selected', e.target.checked);
+    });
+  });
+}
+
+function buildPills(arr, containerId) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = arr.map(function(m) {
+    return '<button class="lpill' + (learnMap[m.id] ? ' selected' : '') + '" data-id="' + m.id + '" onclick="toggleLearn(\'' + m.id + '\',\'' + containerId + '\')">' + m.name + '</button>';
+  }).join('');
+}
+
+function toggleLearn(id, containerId) {
+  learnMap[id] = !learnMap[id];
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var btn = el.querySelector('[data-id="' + id + '"]');
+  if (btn) btn.className = 'lpill' + (learnMap[id] ? ' selected' : '');
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function goStep(n) {
+  document.getElementById('step-' + curStep).style.display = 'none';
+  curStep = n;
+  document.getElementById('step-' + curStep).style.display = 'block';
+  var pct = n * 20;
+  document.getElementById('pb').style.width = pct + '%';
+  document.getElementById('step-lbl').textContent = 'Step ' + n + ' of 5';
+  document.getElementById('step-pct').textContent = pct + '%';
+  if (n === 2) { renderGrid('grid-main'); }
+  if (n === 3) { renderGrid('grid-ent'); renderGrid('grid-spec'); }
+  if (n === 4) { buildTasks(); buildRadio(LEAN_OPTS, 'group-lean', 'lean'); buildRadio(REASON_OPTS, 'group-reason', 'reason'); }
+  if (n === 5) { buildAdv(); buildPills(MAIN, 'pills-main'); buildPills(ENT, 'pills-ent'); buildPills(SPEC, 'pills-spec'); }
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function getAllModels() { return MAIN.concat(ENT).concat(SPEC); }
+
+function byStatus(s) {
+  return getAllModels()
+    .filter(function(m) { return statusMap[m.id] === s; })
+    .map(function(m) { return m.name; })
+    .join(', ') || 'None selected';
+}
+
+function getStarred() {
+  return getAllModels()
+    .filter(function(m) { return starMap[m.id]; })
+    .map(function(m) { return m.name; })
+    .join(', ') || 'None selected';
+}
+
+function getLearn() {
+  return getAllModels()
+    .filter(function(m) { return learnMap[m.id]; })
+    .map(function(m) { return m.name; })
+    .join(', ') || 'None selected';
+}
+
+function getChecked(cid) {
+  var v = [];
+  document.querySelectorAll('#' + cid + ' input:checked').forEach(function(c) { v.push(c.value); });
+  return v.join(', ') || 'None selected';
+}
+
+function getRadio(name) {
+  var r = document.querySelector('input[name="' + name + '"]:checked');
+  return r ? r.value : 'Not answered';
+}
+
+// ============================================================
+// SUBMIT
+// ============================================================
+function doSubmit() {
+  var btn = document.getElementById('submit-btn');
+  btn.textContent = 'Submitting...';
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  var data = {
+    timestamp:    new Date().toISOString(),
+    role:         document.getElementById('q-role').value || 'Not selected',
+    area:         document.getElementById('q-area').value || 'Not selected',
+    ai_using:     byStatus('using'),
+    ai_tried:     byStatus('tried'),
+    ai_aware:     byStatus('aware'),
+    ai_preferred: getStarred(),
+    tasks_used:   getChecked('grid-tasks'),
+    leaning_to:   getRadio('lean'),
+    main_reason:  getRadio('reason'),
+    adv_features: getChecked('group-adv'),
+    want_learn:   getLearn(),
+    open_input:   (document.getElementById('q-open').value || '').trim() || 'No response'
+  };
+
+  // ============================================================
+  // OPTION A: FORMSPREE (replace YOUR_FORM_ID)
+  // Sign up at formspree.io → Create Form → Copy the ID
+  // ============================================================
+  var FORMSPREE_ENDPOINT = 'https://formspree.io/f/mbdwblew';
+
+  fetch(FORMSPREE_ENDPOINT, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body:    JSON.stringify(data)
+  })
+  .then(function(res) {
+    showThankYou(data);
+  })
+  .catch(function(err) {
+    // Even if submission fails, show thank you (change this behavior if needed)
+    document.getElementById('error-banner').style.display = 'block';
+    btn.textContent = 'Submit response →';
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  });
+
+  // ============================================================
+  // OPTION B: YOUR OWN SERVER (PHP backend)
+  // Uncomment below and comment out Formspree block above
+  // ============================================================
+  /*
+  fetch('submit.php', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify(data)
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(result) {
+    if (result.success) { showThankYou(data); }
+    else { showError(); }
+  })
+  .catch(function() { showError(); });
+  */
+}
+
+function showThankYou(data) {
+  document.getElementById('survey-card').style.display  = 'none';
+  document.getElementById('ty-card').style.display      = 'block';
+
+  var rows = [
+    ['Role',                 data.role],
+    ['Area',                 data.area],
+    ['Currently using',      data.ai_using],
+    ['Has tried',            data.ai_tried],
+    ['Preferred model(s)',   data.ai_preferred],
+    ['AI tasks used for',    data.tasks_used],
+    ['Leaning towards',      data.leaning_to],
+    ['Main reason',          data.main_reason],
+    ['Advanced features',    data.adv_features],
+    ['Wants to learn about', data.want_learn],
+    ['Key use case',         data.open_input.substring(0, 120) + (data.open_input.length > 120 ? '...' : '')]
+  ];
+
+  var html = '<div class="sum-lbl">Your submission summary</div>';
+  html += rows.map(function(r) {
+    return '<div class="sum-row"><strong>' + r[0] + ':</strong> ' + r[1] + '</div>';
+  }).join('');
+  document.getElementById('summary-box').innerHTML = html;
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
